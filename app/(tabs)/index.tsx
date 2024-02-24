@@ -1,19 +1,29 @@
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 
 import EditScreenInfo from '@/components/EditScreenInfo';
 import {Text, View} from '@/components/Themed';
 import {RootState} from "@/store";
 import {decrement, increment} from "@/features/launches/launchesSlice";
 import {useAppDispatch, useAppSelector} from "@/hooks/useReduxTypes";
+// import {useGetLaunchByNameQuery} from "@/src/services/launchesApi";
+import { useGetAllLaunchesQuery} from "@/src/services/launchesApi";
 
-export default function Launches() {
+export default function Index() {
 
   const count = useAppSelector((state: RootState) => state.launches.value)
   const dispatch = useAppDispatch()
+  const { data, error, isLoading } =  useGetAllLaunchesQuery()
+  // const { data, error, isLoading } = useGetLaunchByNameQuery('bulbasaur')
 
   return (
       <View style={styles.container}>
-        <Text style={styles.title}>Launches!</Text>
+        {isLoading && <Text>...</Text>}
+        {error && <Text>Error during fetching launched</Text>}
+        <FlatList
+            data={data}
+            renderItem={(item) => {
+              return <Text>{item.item['mission_name']}</Text>
+        }}/>
 
         <View>
           <TouchableOpacity
@@ -32,7 +42,7 @@ export default function Launches() {
         </View>
 
         <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)"/>
-        <EditScreenInfo path="app/(tabs)/index.tsx"/>
+        <EditScreenInfo path="app/(tabs)/lanches.tsx"/>
       </View>
   );
 }

@@ -1,11 +1,10 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import {Tabs} from 'expo-router';
 
 import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { useClientOnlyValue } from '@/hooks/useClientOnlyValue';
+import {useColorScheme} from '@/hooks/useColorScheme';
+import {useClientOnlyValue} from '@/hooks/useClientOnlyValue';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -27,17 +26,17 @@ export default function TabLayout() {
         headerShown: useClientOnlyValue(false, true),
       }}>
       <Tabs.Screen
-        name="index"
+        name="launches"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Launches',
+          tabBarIcon: ({ color }) => <TabBarIcon name="rocket" color={color} />,
         }}
       />
       <Tabs.Screen
         name="two"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Favourites',
+          tabBarIcon: ({ color }) => <TabBarIcon name="star" color={color} />,
         }}
       />
     </Tabs>

@@ -1,15 +1,15 @@
 import {StyleSheet, TouchableOpacity} from 'react-native';
 
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
-import {useDispatch, useSelector} from "react-redux";
+import {Text, View} from '@/components/Themed';
 import {RootState} from "@/store";
 import {decrement, increment} from "@/features/launches/launchesSlice";
+import {useAppDispatch, useAppSelector} from "@/hooks/useReduxTypes";
 
 export default function Launches() {
 
-  const count = useSelector((state: RootState) => state.launches.value)
-  const dispatch = useDispatch()
+  const count = useAppSelector((state: RootState) => state.launches.value)
+  const dispatch = useAppDispatch()
 
   return (
       <View style={styles.container}>

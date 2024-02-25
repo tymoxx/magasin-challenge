@@ -8,9 +8,6 @@ export default function Favourites() {
   const favourites = useAppSelector((state) => state.favourites.favourites);
   const { data: allLaunchesData, error, isLoading } = useGetAllLaunchesQuery(1);
 
-  console.log('favourites', favourites);
-
-
   const favouriteLaunches = allLaunchesData?.filter((launch) =>
       favourites.includes(String(launch.flight_number))
   );

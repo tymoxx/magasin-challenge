@@ -1,36 +1,43 @@
-import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
-
-import EditScreenInfo from '@/components/EditScreenInfo';
+import {ActivityIndicator, FlatList, StyleSheet} from 'react-native';
 import {Text, View} from '@/components/Themed';
 import {RootState} from "@/store";
-import {decrement, increment} from "@/features/launches/launchesSlice";
 import {useAppDispatch, useAppSelector} from "@/hooks/useReduxTypes";
-import { useGetAllLaunchesQuery} from "@/services/launchesApi";
-import {Link} from "expo-router";
+import {useGetAllLaunchesQuery} from "@/services/launchesApi";
+import {LaunchItem} from "@/components/LaunchItem/LaunchItem";
+import {useState} from "react";
 
 export default function Index() {
 
   const count = useAppSelector((state: RootState) => state.launches.value)
   const dispatch = useAppDispatch()
-  const { data: allLaunchesData, error: allLaunchesError, isLoading: allLaunchesLoading } =  useGetAllLaunchesQuery()
+  const [page, setPage] = useState<number>(1);
+  const { data: allLaunchesData, error: allLaunchesError, isLoading: allLaunchesIsLoading } =  useGetAllLaunchesQuery(page)
+
+  const loadMoreItems = () => {
+    setPage(prevPage => prevPage + 1);
+  };
+
+  const renderLoader = () => (
+        allLaunchesIsLoading
+            ?
+            <View style={styles.loaderStyle}>
+              <ActivityIndicator size={'small'}/>
+            </View>
+            : null)
+
   return (
       <View style={styles.container}>
-        {allLaunchesLoading && <Text>...</Text>}
+        {allLaunchesIsLoading && <Text>loading ...</Text>}
         {allLaunchesError && <Text>Error during fetching launched</Text>}
         <FlatList
             data={allLaunchesData}
-            renderItem={(item) => {
-                const flightNumber = item.item['flight_number']
+            renderItem={(item) => <LaunchItem launchData={item.item}/>}
+            onEndReached={loadMoreItems}
+            onEndReachedThreshold={2}
+            ListFooterComponent={renderLoader}
+        />
 
-                return <View>
-                  <Link href={`/launches/${flightNumber}`}>
-                    <Text>{item.item['mission_name']}</Text>
-                  </Link>
-              </View>
-
-        }}/>
-
-        <View>
+       {/* <View>
           <TouchableOpacity
               aria-label="Increment value"
               onPress={() => dispatch(increment())}
@@ -46,8 +53,7 @@ export default function Index() {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)"/>
-        <EditScreenInfo path="app/(tabs)/lanches.tsx"/>
+        <EditScreenInfo path="app/(tabs)/lanches.tsx"/>*/}
       </View>
   );
 }
@@ -55,16 +61,8 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  loaderStyle: {
+    marginVertical: 16
   },
 });

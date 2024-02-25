@@ -2,7 +2,7 @@ import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {Tabs} from 'expo-router';
 
-import Colors from '@/constants/Colors';
+import colors from '@/utils/colors';
 import {useColorScheme} from '@/hooks/useColorScheme';
 import {useClientOnlyValue} from '@/hooks/useClientOnlyValue';
 
@@ -20,7 +20,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: colors[colorScheme ?? 'light'].tint,
         headerShown: useClientOnlyValue(false, true),
       }}>
       <Tabs.Screen

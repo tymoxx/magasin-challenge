@@ -3,7 +3,6 @@ import {Link} from "expo-router";
 import {Image, StyleSheet, TouchableOpacity} from "react-native";
 import {Text, View} from "@/components/Themed";
 import {Launch} from "@/services/launchesApi";
-import {Pressable} from "expo-router/build/views/Pressable";
 import {formatDate} from "@/utils/helpers";
 
 type LaunchItemProps = {

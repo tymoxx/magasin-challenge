@@ -46,11 +46,23 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
-  return (
+    return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Provider store={store}>
         <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+              name="(tabs)"
+              options={{
+                headerShown: false,
+                headerTitle: 'Launches'
+              }}
+          />
+          <Stack.Screen
+              name="launches/[flightNumber]"
+              options={{
+                headerTitle: 'Details',
+              }}
+          />
         </Stack>
       </Provider>
     </ThemeProvider>

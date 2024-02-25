@@ -5,24 +5,29 @@ import {Text, View} from '@/components/Themed';
 import {RootState} from "@/store";
 import {decrement, increment} from "@/features/launches/launchesSlice";
 import {useAppDispatch, useAppSelector} from "@/hooks/useReduxTypes";
-// import {useGetLaunchByNameQuery} from "@/src/services/launchesApi";
-import { useGetAllLaunchesQuery} from "@/src/services/launchesApi";
+import { useGetAllLaunchesQuery} from "@/services/launchesApi";
+import {Link} from "expo-router";
 
 export default function Index() {
 
   const count = useAppSelector((state: RootState) => state.launches.value)
   const dispatch = useAppDispatch()
-  const { data, error, isLoading } =  useGetAllLaunchesQuery()
-  // const { data, error, isLoading } = useGetLaunchByNameQuery('bulbasaur')
-
+  const { data: allLaunchesData, error: allLaunchesError, isLoading: allLaunchesLoading } =  useGetAllLaunchesQuery()
   return (
       <View style={styles.container}>
-        {isLoading && <Text>...</Text>}
-        {error && <Text>Error during fetching launched</Text>}
+        {allLaunchesLoading && <Text>...</Text>}
+        {allLaunchesError && <Text>Error during fetching launched</Text>}
         <FlatList
-            data={data}
+            data={allLaunchesData}
             renderItem={(item) => {
-              return <Text>{item.item['mission_name']}</Text>
+                const flightNumber = item.item['flight_number']
+
+                return <View>
+                  <Link href={`/launches/${flightNumber}`}>
+                    <Text>{item.item['mission_name']}</Text>
+                  </Link>
+              </View>
+
         }}/>
 
         <View>

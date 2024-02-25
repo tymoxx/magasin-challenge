@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import {launchesReducer} from "@/features/launches/launchesSlice";
-import {launchesApi} from "@/src/services/launchesApi";
+import {launchesApi} from "@/services/launchesApi";
 
 export const store = configureStore({
   reducer: {

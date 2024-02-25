@@ -1,10 +1,9 @@
 # Spasex Rocket Launches App
 
 ## Description
-This is a simple app that shows the latest SpaceX rocket launches. It uses the [SpaceX API](https://docs.spacexdata.com) to fetch the data. 
+**React Native Expo** app that shows the SpaceX rocket launches. It uses the [SpaceX API](https://docs.spacexdata.com) to fetch the data. 
 
 The app is built with **React** and **Redux Toolkit**. It uses **RTK Query** to fetch the data from the API. 
-
 The app uses **Lazy Loading** to load the data in chunks while scrolling.
 
 The app has the possibility to add a launch to favorites and uses **Redux Persist** to persist the data locally. 
@@ -14,6 +13,7 @@ The app has a **dark and light mode** and also has a **search** feature.
 ![Screenshot](spasex-launches-app-screenshot.jpg)
 
 ## Features
+- React Native Expo
 - Redux Toolkit
 - RTK Query
 - Lazy Loading (Infinite Scroll)

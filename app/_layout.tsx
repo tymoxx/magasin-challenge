@@ -7,7 +7,8 @@ import {useEffect} from 'react';
 
 import {useColorScheme} from '@/hooks/useColorScheme';
 import {Provider} from "react-redux";
-import {store} from "@/store";
+import {persistor, store} from "@/store";
+import {PersistGate} from "redux-persist/integration/react";
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -49,21 +50,23 @@ function RootLayoutNav() {
     return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Provider store={store}>
-        <Stack>
-          <Stack.Screen
-              name="(tabs)"
-              options={{
-                headerShown: false,
-                headerTitle: 'Launches'
-              }}
-          />
-          <Stack.Screen
-              name="launches/[flightNumber]"
-              options={{
-                headerTitle: 'Details',
-              }}
-          />
-        </Stack>
+        <PersistGate loading={null} persistor={persistor}>
+          <Stack>
+              <Stack.Screen
+                  name="(tabs)"
+                  options={{
+                    headerShown: false,
+                    headerTitle: 'Launches'
+                  }}
+              />
+              <Stack.Screen
+                  name="launches/[flightNumber]"
+                  options={{
+                    headerTitle: 'Details',
+                  }}
+              />
+          </Stack>
+        </PersistGate>
       </Provider>
     </ThemeProvider>
   );

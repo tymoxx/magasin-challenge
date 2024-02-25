@@ -28,8 +28,9 @@ export const launchesApi = createApi({
                 return endpointName
             },
             merge: (currentCache, newItems) => {
-                currentCache.push(...newItems)
-            },
+                const uniqueIds = new Set(currentCache.map(item => item.flight_number));
+                const filteredNewItems = newItems.filter(item => !uniqueIds.has(item.flight_number));
+                return [...currentCache, ...filteredNewItems];            },
             forceRefetch({ currentArg, previousArg }) {
                 return currentArg !== previousArg
             },

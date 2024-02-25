@@ -1,17 +1,18 @@
-import {ActivityIndicator, FlatList, StyleSheet} from 'react-native';
+import {ActivityIndicator, FlatList, StyleSheet, TextInput} from 'react-native';
 import {Text, View} from '@/components/Themed';
-import {RootState} from "@/store";
-import {useAppDispatch, useAppSelector} from "@/hooks/useReduxTypes";
 import {useGetAllLaunchesQuery} from "@/services/launchesApi";
 import {LaunchItem} from "@/components/LaunchItem/LaunchItem";
 import {useState} from "react";
 
 export default function Index() {
 
-  const count = useAppSelector((state: RootState) => state.launches.value)
-  const dispatch = useAppDispatch()
   const [page, setPage] = useState<number>(1);
   const { data: allLaunchesData, error: allLaunchesError, isLoading: allLaunchesIsLoading } =  useGetAllLaunchesQuery(page)
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const filteredData = allLaunchesData?.filter(launch =>
+        launch.mission_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const loadMoreItems = () => {
     setPage(prevPage => prevPage + 1);
@@ -27,42 +28,42 @@ export default function Index() {
 
   return (
       <View style={styles.container}>
+          <TextInput
+              style={styles.searchInput}
+              placeholder="Search"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+          />
+
         {allLaunchesIsLoading && <Text>loading ...</Text>}
         {allLaunchesError && <Text>Error during fetching launched</Text>}
         <FlatList
-            data={allLaunchesData}
+            data={filteredData}
             renderItem={(item) => <LaunchItem launchData={item.item}/>}
             onEndReached={loadMoreItems}
             onEndReachedThreshold={2}
             ListFooterComponent={renderLoader}
         />
-
-       {/* <View>
-          <TouchableOpacity
-              aria-label="Increment value"
-              onPress={() => dispatch(increment())}
-          >
-            <Text>Increment</Text>
-          </TouchableOpacity>
-          <Text>{count}</Text>
-          <TouchableOpacity
-              aria-label="Decrement value"
-              onPress={() => dispatch(decrement())}
-          >
-            <Text>Decrement</Text>
-          </TouchableOpacity>
-        </View>
-
-        <EditScreenInfo path="app/(tabs)/lanches.tsx"/>*/}
       </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  loaderStyle: {
+    container: {
+        flex: 1,
+    },
+    searchInput: {
+        color: 'grey',
+        height: 50,
+        fontSize: 18,
+        fontWeight: 'bold',
+        borderColor: 'transparent',
+        borderBottomColor: 'grey',
+        borderWidth: 1,
+        paddingLeft: 8,
+        margin: 8,
+    },
+    loaderStyle: {
     marginVertical: 16
   },
 });

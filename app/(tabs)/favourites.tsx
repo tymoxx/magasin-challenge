@@ -1,31 +1,37 @@
-import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import {ActivityIndicator, FlatList, StyleSheet} from 'react-native';
+import {Text, View} from '@/components/Themed';
+import {LaunchItem} from "@/components/LaunchItem/LaunchItem";
+import {useAppSelector} from "@/hooks/useReduxTypes";
+import {useGetAllLaunchesQuery} from "@/services/launchesApi";
 
 export default function Favourites() {
+  const favourites = useAppSelector((state) => state.favourites.favourites);
+  const { data: allLaunchesData, error, isLoading } = useGetAllLaunchesQuery(1);
+
+  const favouriteLaunches = allLaunchesData?.filter((launch) =>
+      favourites.includes(String(launch.flight_number))
+  );
+
+  if (isLoading) {
+    return <ActivityIndicator size={'small'}/>
+  }
+
+  if (error) {
+    return <Text>Error during loading launches</Text>;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Favourites</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/favourites.tsx" />
-    </View>
+      <View style={styles.container}>
+        <FlatList
+            data={favouriteLaunches}
+            renderItem={({ item }) => <LaunchItem launchData={item} />}
+        />
+      </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
 });

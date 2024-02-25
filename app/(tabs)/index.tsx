@@ -1,15 +1,11 @@
 import {ActivityIndicator, FlatList, StyleSheet} from 'react-native';
 import {Text, View} from '@/components/Themed';
-import {RootState} from "@/store";
-import {useAppDispatch, useAppSelector} from "@/hooks/useReduxTypes";
 import {useGetAllLaunchesQuery} from "@/services/launchesApi";
 import {LaunchItem} from "@/components/LaunchItem/LaunchItem";
 import {useState} from "react";
 
 export default function Index() {
 
-  const count = useAppSelector((state: RootState) => state.launches.value)
-  const dispatch = useAppDispatch()
   const [page, setPage] = useState<number>(1);
   const { data: allLaunchesData, error: allLaunchesError, isLoading: allLaunchesIsLoading } =  useGetAllLaunchesQuery(page)
 
@@ -36,24 +32,6 @@ export default function Index() {
             onEndReachedThreshold={2}
             ListFooterComponent={renderLoader}
         />
-
-       {/* <View>
-          <TouchableOpacity
-              aria-label="Increment value"
-              onPress={() => dispatch(increment())}
-          >
-            <Text>Increment</Text>
-          </TouchableOpacity>
-          <Text>{count}</Text>
-          <TouchableOpacity
-              aria-label="Decrement value"
-              onPress={() => dispatch(decrement())}
-          >
-            <Text>Decrement</Text>
-          </TouchableOpacity>
-        </View>
-
-        <EditScreenInfo path="app/(tabs)/lanches.tsx"/>*/}
       </View>
   );
 }

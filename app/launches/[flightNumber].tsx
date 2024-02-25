@@ -4,11 +4,15 @@ import {useLocalSearchParams} from "expo-router";
 import {useGetLaunchByFlightNameQuery} from "@/services/launchesApi";
 import React from "react";
 import {formatDate} from "@/utils/helpers";
+import {useFavourite} from "@/hooks/useFavourite";
+import {Star} from "@/components/Star/Star";
 
 export default function LaunchDetails() {
-    const { flightNumber } = useLocalSearchParams();
+    const { flightNumber } = useLocalSearchParams() as { flightNumber: string };
     // @ts-ignore
     const { data: launchData, error, isLoading: launchIsLoading } = useGetLaunchByFlightNameQuery(flightNumber)
+
+    const { isFavourite, toggleFavourite } = useFavourite(flightNumber);
 
     const imageSmall = launchData?.links.mission_patch_small;
     const dateUTC = launchData?.launch_date_utc;
@@ -38,6 +42,7 @@ export default function LaunchDetails() {
                         <Text style={styles.text}>Site name - <Text style={styles.highlighted}>{launchData?.launch_site?.site_name}</Text></Text>
                         <Text style={styles.text}>Mission name - <Text style={styles.highlighted}>{launchData?.mission_name}</Text></Text>
                     </View>
+                    <Star isFavourite={isFavourite} onToggle={toggleFavourite} />
                 </>
             }
         </View>

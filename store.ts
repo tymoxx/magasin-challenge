@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import {launchesReducer} from "@/features/launches/launchesSlice";
 import {launchesApi} from "@/services/launchesApi";
+import {favouritesReducer} from "@/features/favourites/favouritesSlice";
 
 export const store = configureStore({
   reducer: {
-    launches: launchesReducer,
+    favourites: favouritesReducer,
     [launchesApi.reducerPath]: launchesApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
